@@ -1,4 +1,4 @@
-import { Container, Stack, Card, CardActions, Button, CardContent, Typography } from "@mui/material";
+import { Container, Stack, Card, CardActions, Button, CardContent, Grid, Typography } from "@mui/material";
 import { Group, Restaurant, SupervisorAccount } from "@mui/icons-material";
 import React, { useState } from "react";
 import { Header } from "../common/styled";
@@ -39,48 +39,59 @@ export const Customers: React.FC = () => {
                     Welcome, {userInfo?.firstName || ""}
                 </Header>
             </Stack>
-            <Stack sx={{ width: '100%', mt: 2 }} spacing={3} direction="row">
+            <Grid container spacing={2}>
                 {userInfo?.role === "admin" && (
-                    <Card sx={{ width: 345 }}>
-                        <CardContent sx={{ background: "#651fff" }}>
+                    <Grid item xs={12} sm={6} md={4} lg={3}>
+                        <Card>
+                            <CardContent sx={{ background: "#651fff" }}>
+                                <Typography gutterBottom variant="h5" component="div" sx={{ color: "white"}}>
+                                    Resto Owners
+                                </Typography>
+                                <Typography variant="body2" color="white" fontSize={20} sx={{ display: "flex"}}>
+                                    <SupervisorAccount sx={{ mr: 1 }} /> {restoOnwerSize}
+                                </Typography>
+                            </CardContent>
+                            <CardActions sx={{ display: "flex", flexDirection: "row-reverse"}}>
+                                <Button size="small" onClick={() => handleNavigation("/owners")}>Go to Resto Owners Page</Button>
+                            </CardActions>
+                        </Card>
+                    </Grid>
+                )}
+                <Grid item xs={12} sm={6} md={4} lg={3}>
+                    <Card>
+                        <CardContent sx={{ background: "#2196f3" }}>
                             <Typography gutterBottom variant="h5" component="div" sx={{ color: "white"}}>
-                                Resto Owners
+                                Customers
                             </Typography>
                             <Typography variant="body2" color="white" fontSize={20} sx={{ display: "flex"}}>
-                                <SupervisorAccount sx={{ mr: 1 }} /> {restoOnwerSize}
+                                <Group sx={{ mr: 1 }} /> {customerSize}
                             </Typography>
                         </CardContent>
                         <CardActions sx={{ display: "flex", flexDirection: "row-reverse"}}>
-                            <Button size="small" onClick={() => handleNavigation("/owners")}>Go to Resto Owners Page</Button>
+                            <Button size="small" onClick={() => handleNavigation("/customers")}>Go to Customers Page</Button>
                         </CardActions>
                     </Card>
-                )}
-                <Card sx={{ width: 345 }}>
-                    <CardContent sx={{ background: "#2196f3" }}>
-                        <Typography gutterBottom variant="h5" component="div" sx={{ color: "white"}}>
-                            Customers
-                        </Typography>
-                        <Typography variant="body2" color="white" fontSize={20} sx={{ display: "flex"}}>
-                            <Group sx={{ mr: 1 }} /> {customerSize}
-                        </Typography>
-                    </CardContent>
-                    <CardActions sx={{ display: "flex", flexDirection: "row-reverse"}}>
-                        <Button size="small" onClick={() => handleNavigation("/customers")}>Go to Customers Page</Button>
-                    </CardActions>
-                </Card>
-                <Card sx={{ width: 345 }}>
-                    <CardContent sx={{ background: "#b26500" }}>
-                        <Typography gutterBottom variant="h5" component="div" sx={{ color: "white"}}>
-                            Products
-                        </Typography>
-                        <Typography variant="body2" color="white" fontSize={20} sx={{ display: "flex"}}>
-                            <Restaurant sx={{ mr: 1 }} /> {productSize}
-                        </Typography>
-                    </CardContent>
-                    <CardActions sx={{ display: "flex", flexDirection: "row-reverse"}}>
-                        <Button size="small" onClick={() => handleNavigation("/products")}>Go to Products Page</Button>
-                    </CardActions>
-                </Card>
+                </Grid>
+                <Grid item xs={12} sm={6} md={4} lg={3}>
+                    <Card>
+                        <CardContent sx={{ background: "#b26500" }}>
+                            <Typography gutterBottom variant="h5" component="div" sx={{ color: "white"}}>
+                                Products
+                            </Typography>
+                            <Typography variant="body2" color="white" fontSize={20} sx={{ display: "flex"}}>
+                                <Restaurant sx={{ mr: 1 }} /> {productSize}
+                            </Typography>
+                        </CardContent>
+                        <CardActions sx={{ display: "flex", flexDirection: "row-reverse"}}>
+                            <Button size="small" onClick={() => handleNavigation("/products")}>Go to Products Page</Button>
+                        </CardActions>
+                    </Card>
+                </Grid>
+            </Grid>
+            <Stack sx={{ width: '100%', mt: 2 }} spacing={3} direction="row">
+                
+                
+                
             </Stack>
         </Container>
     )
