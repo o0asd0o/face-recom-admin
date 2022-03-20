@@ -27,7 +27,8 @@ export const Products: React.FC = () => {
     const { handleNavigation } = useHomeNavigation();
 
     React.useEffect(() => {
-        if (!userInfo?.email) return;
+        if (!userInfo?.email || !userInfo?.role) return;
+        const { email, role } = userInfo;
         setLoading(true);
 
         const unsub = onProductsSnapshot((snapshot) => {
@@ -48,7 +49,7 @@ export const Products: React.FC = () => {
 
             setProducts(productsResult);
             setLoading(false);
-        }, userInfo?.email);
+        }, email, role === "owner");
 
         return () => unsub();
     }, [userInfo?.email]);

@@ -138,21 +138,13 @@ const WebPageConfigForm: React.FC = () => {
             Customize your web page
           </Typography>
         </Grid>
-        <Grid
-          item
-          xs={6}
-          sx={{
-            display: "flex",
-            justifyContent: "flex-end",
-          }}
-        >
-        </Grid>
       </Grid>
       <Divider />
       <Grid container spacing={4} sx={{ mt: 0.1 }}>
         <Grid
           item
-          xs={6}
+          xs={12}
+          sm={6}
           sx={{
             display: "flex",
             flexDirection: "column",
@@ -183,7 +175,8 @@ const WebPageConfigForm: React.FC = () => {
         </Grid>
         <Grid
           item
-          xs={6}
+          xs={12}
+          sm={6}   
           sx={{
             display: "flex",
             flexDirection: "column",

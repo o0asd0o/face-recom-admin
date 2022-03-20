@@ -15,20 +15,7 @@ export const mapUserData = (
         email: data.email,
         createdDate: serverTimestamp(),
         updatedDate: serverTimestamp(),
+        status: "pending",
         role: "owner"
   };
-}
-
-export const mapDefaultWebPageData = (email: string) => {
-  return {
-    ownerEmail: email,
-    description: "",
-    landingImageUrl: "",
-    logoUrl: "",
-    storeName: "",
-    themeColor: "",
-    facebookPage: "",
-    contactNumber: "",
-    updated: false,
-  }
 }

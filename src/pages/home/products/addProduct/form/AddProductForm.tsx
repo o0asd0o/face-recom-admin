@@ -116,21 +116,13 @@ const AddProductForm: React.FC<Props> = ({ onBack }) => {
             Product Information
           </Typography>
         </Grid>
-        <Grid
-          item
-          xs={6}
-          sx={{
-            display: "flex",
-            justifyContent: "flex-end",
-          }}
-        >
-        </Grid>
       </Grid>
       <Divider />
       <Grid container spacing={4} sx={{ mt: 0.1 }}>
         <Grid
           item
-          xs={4}
+          xs={12}
+          sm={4}
           sx={{
             display: "flex",
             flexDirection: "column",
@@ -158,7 +150,7 @@ const AddProductForm: React.FC<Props> = ({ onBack }) => {
             )}
           </AvatarContainer>
         </Grid>
-        <Grid item xs={8}>
+        <Grid item sm={8} xs={12}>
           <Stack spacing={2}>
             <TextField
               fullWidth

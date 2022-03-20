@@ -7,8 +7,12 @@ const firestoreRef = getFirestore();
 export const onProductsSnapshot = (
   observer: (snashot: QuerySnapshot<DocumentData>) => void,
   ownerEmail: string,
+  isOwner: boolean,
 ) => {
-  const resQuery = query(productsCollection, where('ownerEmail', '==', ownerEmail))
+  let resQuery = query(productsCollection)
+  if (isOwner) {
+    resQuery = query(productsCollection, where('ownerEmail', '==', ownerEmail))
+  }
 
   return onSnapshot(resQuery, observer)
 };

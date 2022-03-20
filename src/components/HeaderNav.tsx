@@ -114,7 +114,7 @@ const HeaderNav: React.FC = () => {
             onClick={() => handleNavigate('/dashboard', 0)}
             sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' }, cursor: "pointer" }}
           >
-            asdasd
+            Food&nbsp;<span style={{ color: "#81c784" }}>Findr</span>
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, alignItems: "center" }}>
             {pages.filter((page) => userInfo && page.permission.includes(userInfo.role)).map(({ title, page }, index) => (

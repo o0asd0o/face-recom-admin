@@ -1,5 +1,7 @@
 import { ColorValue } from "mui-color";
 
+export type Status = "pending" | "approved" | "declined";
+
 export type LoginCreds = {
   email: string;
   password: string;
@@ -13,6 +15,7 @@ export type RegistrationDetails = {
   password: string;
   address: string;
   phoneNumber: string;
+  status?: Status;
 };
 
 export type UserInformation = Omit<
@@ -85,3 +88,14 @@ export type Customer = {
   contact: string;
   address: string;
 };
+
+export type RestoOwner = {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string;
+  avatarUrl: string;
+  address: string;
+  status?: string;
+}

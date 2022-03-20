@@ -1,4 +1,5 @@
 import { FieldValue } from "firebase/firestore";
+import { Status } from "types";
 
 export type UserData = {
     avatarUrl: string,
@@ -7,6 +8,7 @@ export type UserData = {
     lastName: string,
     phoneNumber: string,
     email: string,
+    status?: Status,
     createdDate: FieldValue,
     updatedDate: FieldValue,
     role: "owner" | "admin"

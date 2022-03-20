@@ -41,8 +41,9 @@ const LoginPage: React.FC = () => {
     const handleSignIn = async ({ email, password }: LoginCreds) => {
         try {
             setLoading(true)
-            const isEmailExists = await emailExists(email);
-            if (isEmailExists) {
+            const { isEmailExists, status } = await emailExists(email);
+
+            if (isEmailExists && status === "approved") {
                 const response = await signInEmailPassword(email, password);
 
                 if (response) {
@@ -50,6 +51,10 @@ const LoginPage: React.FC = () => {
                 } else {
                     setError("Request failed, please try again")
                 }
+            } else if (isEmailExists && status === "pending") {
+                setError("Your account is currently pending for approval, please contact administrator for details")
+            } else if (isEmailExists && status === "declined") {
+                setError("Your account declined, please contact administrator for details")
             } else {
                 setError("Email doesn't exists!")
             }

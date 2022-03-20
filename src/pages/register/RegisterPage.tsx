@@ -16,9 +16,10 @@ import {  validation } from "./helpers";
 import { addDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
 import { registerWithEmailPassword, uploadUsersImage, usersCollection, webPagesCollection } from "providers/firebase";
-import { mapDefaultWebPageData, mapUserData } from "utils/mappers/userMappers";
+import { mapDefaultWebPageData } from "utils/mappers/webPageMappers";
 import { UserData, WebPageData } from "types/server";
 import { Logo } from "pages/login/styled/StyledLoginPage";
+import { mapUserData } from "utils/mappers/userMappers";
 
 const initialValues: RegistrationDetails = {
     avatar: null,

@@ -97,7 +97,8 @@ const EditProductForm: React.FC<Props> = ({ onBack }) => {
     onSubmit: handleUpdateProduct,
   });
   useEffect(() => {
-    if (!userInfo?.email) return;
+    if (!userInfo?.email || !userInfo.role) return;
+    const { email, role } = userInfo;
     setLoading(true);
 
     const unsub = onProductsSnapshot((snapshot) => {
@@ -105,10 +106,10 @@ const EditProductForm: React.FC<Props> = ({ onBack }) => {
         snapshot.forEach((doc) => {
             productsResult.push({
                 id: doc.id,
-                sadFoodRating: doc.data().sadFoodRating,
-                angryFoodRating: doc.data().angryFoodRating,
-                happyFoodRating: doc.data().happyFoodRating,
-                surpriseFoodRating: doc.data().surpriseFoodRating,
+                sadFoodRating: doc.data().sadFoodRating || 0,
+                angryFoodRating: doc.data().angryFoodRating || 0,
+                happyFoodRating: doc.data().happyFoodRating || 0,
+                surpriseFoodRating: doc.data().surpriseFoodRating || 0,
                 image: doc.data().imageUrl,
                 name: doc.data().name,
                 price: doc.data().price,
@@ -117,7 +118,7 @@ const EditProductForm: React.FC<Props> = ({ onBack }) => {
 
         setSelectedProduct(productsResult.find((item) => item.id === productId));
         setLoading(false);
-    }, userInfo?.email);
+    }, email, role === "owner");
 
     return () => unsub();
   }, [userInfo?.email, productId]);
@@ -130,21 +131,13 @@ const EditProductForm: React.FC<Props> = ({ onBack }) => {
             Product Information
           </Typography>
         </Grid>
-        <Grid
-          item
-          xs={6}
-          sx={{
-            display: "flex",
-            justifyContent: "flex-end",
-          }}
-        >
-        </Grid>
       </Grid>
       <Divider />
       <Grid container spacing={4} sx={{ mt: 0.1 }}>
         <Grid
           item
-          xs={4}
+          xs={12}
+          sm={4}
           sx={{
             display: "flex",
             flexDirection: "column",
@@ -172,7 +165,7 @@ const EditProductForm: React.FC<Props> = ({ onBack }) => {
             )}
           </AvatarContainer>
         </Grid>
-        <Grid item xs={8}>
+        <Grid item xs={12} sm={8}>
           <Stack spacing={2}>
             <TextField
               fullWidth

@@ -21,7 +21,6 @@ const NoRowsOverlay: React.FC = () => (
 export const Customers: React.FC = () => {
     const [customers, setCustomers] = React.useState<Customer[]>([]);
     const [loading, setLoading] = React.useState<boolean>(true);
-    const { handleNavigation } = useHomeNavigation();
 
     React.useEffect(() => {
         setLoading(true);

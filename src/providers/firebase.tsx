@@ -41,6 +41,8 @@ export const productsCollection = collection(firestoreRef, "products");
 export const webPagesCollection = collection(firestoreRef, "webPages");
 export const usersCollection = collection(firestoreRef, "users");
 export const customersCollection = collection(firestoreRef, "customers");
+export const restoOwnersCollection = collection(firestoreRef, "users");
+
 export const signInEmailPassword = (email: string, password: string) =>
   signInWithEmailAndPassword(authRef, email, password);
   export const registerWithEmailPassword = (
