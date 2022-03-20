@@ -7,10 +7,13 @@ const mapProductData = (
   productImagePath: string,
 ): ProductData => {
     return {
-        foodRating: data.foodRating,
-        imageUrl: productImagePath,
-        name: data.name,
-        price: data.price,
+      happyFoodRating: data.happyFoodRating || 0,
+      surpriseFoodRating: data.surpriseFoodRating || 0,
+      angryFoodRating: data.angryFoodRating || 0,
+      sadFoodRating: data.sadFoodRating || 0,
+      imageUrl: productImagePath,
+      name: data.name,
+      price: data.price,
   };
 };
 

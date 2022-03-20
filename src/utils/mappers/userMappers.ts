@@ -18,3 +18,17 @@ export const mapUserData = (
         role: "owner"
   };
 }
+
+export const mapDefaultWebPageData = (email: string) => {
+  return {
+    ownerEmail: email,
+    description: "",
+    landingImageUrl: "",
+    logoUrl: "",
+    storeName: "",
+    themeColor: "",
+    facebookPage: "",
+    contactNumber: "",
+    updated: false,
+  }
+}

@@ -38,8 +38,6 @@ const LoginPage: React.FC = () => {
     const [loading, setLoading] = React.useState<boolean>(false);
     const navigate = useNavigate();
 
-    const [showPassword, setShowPassword] = React.useState<boolean>(false);
-
     const handleSignIn = async ({ email, password }: LoginCreds) => {
         try {
             setLoading(true)

@@ -31,7 +31,10 @@ type Props = {
 };
 
 const validation = yup.object({
-    foodRating: yup.number().required("Food rating is required"),
+    sadFoodRating: yup.number().required("Sad rating is required"),
+    happyFoodRating: yup.number().required("Happy rating is required"),
+    surpriseFoodRating: yup.number().required("Surprise rating is required"),
+    angryFoodRating: yup.number().required("Angry rating is required"),
     image: yup
         .mixed()
         .required('Product image is required')
@@ -56,7 +59,10 @@ const validation = yup.object({
 });
 
 const initialValues: ProductInformation = {
-  foodRating: 0,
+  sadFoodRating: 0,
+  happyFoodRating: 0,
+  surpriseFoodRating: 0,
+  angryFoodRating: 0,
   image: null,
   name: "",
   price: 1,
@@ -179,24 +185,77 @@ const AddProductForm: React.FC<Props> = ({ onBack }) => {
               onChange={form.handleChange}
               error={form.touched.price && Boolean(form.errors.price)}
               helperText={form.touched.price && form.errors.price}
-          />
-          <TextField
-              fullWidth
-              name="foodRating"
-              label="Food Rating (0-12)"
-              variant="outlined"
-              inputProps={{ min: 0, max: 12 }}
-              type="number"
-              autoComplete="off"
-              value={form.values.foodRating}
-              onBlur={form.handleBlur}
-              onChange={({ target }) => {
-                const { value } = target;
-                form.setFieldValue('foodRating', Math.max(0, Math.min(12, parseInt(value))));
-              }}
-              error={form.touched.foodRating && Boolean(form.errors.foodRating)}
-              helperText={form.touched.foodRating && form.errors.foodRating }
-          />
+            />
+            {userInfo?.role === "admin" && (<>
+              <TextField
+                  fullWidth
+                  name="happyFoodRating"
+                  label="Happy Rating (0-12)"
+                  variant="outlined"
+                  inputProps={{ min: 0, max: 12 }}
+                  type="number"
+                  autoComplete="off"
+                  value={form.values.happyFoodRating}
+                  onBlur={form.handleBlur}
+                  onChange={({ target }) => {
+                    const { value } = target;
+                    form.setFieldValue('happyFoodRating', Math.max(0, Math.min(12, parseInt(value))));
+                  }}
+                  error={form.touched.happyFoodRating && Boolean(form.errors.happyFoodRating)}
+                  helperText={form.touched.happyFoodRating && form.errors.happyFoodRating }
+              />
+              <TextField
+                  fullWidth
+                  name="sadFoodRating"
+                  label="Sad Rating (0-12)"
+                  variant="outlined"
+                  inputProps={{ min: 0, max: 12 }}
+                  type="number"
+                  autoComplete="off"
+                  value={form.values.sadFoodRating}
+                  onBlur={form.handleBlur}
+                  onChange={({ target }) => {
+                    const { value } = target;
+                    form.setFieldValue('sadFoodRating', Math.max(0, Math.min(12, parseInt(value))));
+                  }}
+                  error={form.touched.sadFoodRating && Boolean(form.errors.sadFoodRating)}
+                  helperText={form.touched.sadFoodRating && form.errors.sadFoodRating }
+              />
+              <TextField
+                  fullWidth
+                  name="surpriseFoodRating"
+                  label="Surprise Rating (0-12)"
+                  variant="outlined"
+                  inputProps={{ min: 0, max: 12 }}
+                  type="number"
+                  autoComplete="off"
+                  value={form.values.surpriseFoodRating}
+                  onBlur={form.handleBlur}
+                  onChange={({ target }) => {
+                    const { value } = target;
+                    form.setFieldValue('surpriseFoodRating', Math.max(0, Math.min(12, parseInt(value))));
+                  }}
+                  error={form.touched.surpriseFoodRating && Boolean(form.errors.surpriseFoodRating)}
+                  helperText={form.touched.surpriseFoodRating && form.errors.surpriseFoodRating }
+              />
+              <TextField
+                  fullWidth
+                  name="angryFoodRating"
+                  label="Angry Rating (0-12)"
+                  variant="outlined"
+                  inputProps={{ min: 0, max: 12 }}
+                  type="number"
+                  autoComplete="off"
+                  value={form.values.angryFoodRating}
+                  onBlur={form.handleBlur}
+                  onChange={({ target }) => {
+                    const { value } = target;
+                    form.setFieldValue('angryFoodRating', Math.max(0, Math.min(12, parseInt(value))));
+                  }}
+                  error={form.touched.angryFoodRating && Boolean(form.errors.angryFoodRating)}
+                  helperText={form.touched.angryFoodRating && form.errors.angryFoodRating }
+              />
+            </>)}
           </Stack>
         </Grid>
       </Grid>

@@ -28,7 +28,6 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
 
   useEffect(() => {
     if (!user?.email) return;
-
     (async () => {
       if (user.email)  {
          const info = await getCurrentUser(user.email);
@@ -45,8 +44,6 @@ export function AuthProvider({ children }: { children: JSX.Element }) {
       }
     })();
   }, [user?.email])
-
-  console.log({ userInfo , user });
 
   return (
     <AuthContext.Provider value={{ user, userInfo }}>{children}</AuthContext.Provider>

@@ -24,10 +24,24 @@ export const columns = (props: ColumnProps): GridColumns => {
       minWidth: 150,
     },
     {
-      field: 'foodRating',
-      headerName: 'Rating',
-      width: 200,
-      
+      field: 'happyFoodRating',
+      headerName: 'Happy Rating',
+      width: 150,
+    },
+    {
+      field: 'sadFoodRating',
+      headerName: 'Sad Rating',
+      width: 150,
+    },
+    {
+      field: 'surpriseFoodRating',
+      headerName: 'Surprise Rating',
+      width: 150,
+    },
+    {
+      field: 'angryFoodRating',
+      headerName: 'Angry Rating',
+      width: 150,
     },
     {
       field: 'imageUrl',

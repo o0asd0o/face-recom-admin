@@ -15,9 +15,9 @@ import MainFields from "./MainFields";
 import {  validation } from "./helpers";
 import { addDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
-import { registerWithEmailPassword, uploadUsersImage, usersCollection } from "providers/firebase";
-import { mapUserData } from "utils/mappers/userMappers";
-import { UserData } from "types/server";
+import { registerWithEmailPassword, uploadUsersImage, usersCollection, webPagesCollection } from "providers/firebase";
+import { mapDefaultWebPageData, mapUserData } from "utils/mappers/userMappers";
+import { UserData, WebPageData } from "types/server";
 import { Logo } from "pages/login/styled/StyledLoginPage";
 
 const initialValues: RegistrationDetails = {
@@ -39,8 +39,10 @@ const handleSubmit = async ({ password, ...otherDetails}: RegistrationDetails) =
             userImagePath = await uploadUsersImage(otherDetails.avatar);
         }
 
-        const userData: UserData = mapUserData(otherDetails, userImagePath)
+        const userData: UserData = mapUserData(otherDetails, userImagePath);
+        const webPageData: WebPageData = mapDefaultWebPageData(otherDetails.email);
 
+        await addDoc(webPagesCollection, webPageData)
         await addDoc(usersCollection, userData);
     };
 

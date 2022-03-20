@@ -5,10 +5,8 @@ import { Box } from "@mui/system";
 import { DataGrid } from "@mui/x-data-grid";
 import { useAuth } from "context/authContext";
 import { useHomeNavigation } from "context/navigationContext";
-import { truncate } from "lodash";
 import { deleteProductDoc, onProductsSnapshot } from "providers/products";
 import React, { useCallback } from "react";
-import { useNavigate } from "react-router-dom";
 import { Product } from "types";
 import { Header } from "../common/styled";
 import { columns } from "./columns";
@@ -38,7 +36,10 @@ export const Products: React.FC = () => {
                 productsResult.push({
                     id: doc.id,
                     ownerEmail: doc.data().ownerEmail,
-                    foodRating: doc.data().foodRating,
+                    sadFoodRating: doc.data().sadFoodRating,
+                    happyFoodRating: doc.data().happyFoodRating,
+                    surpriseFoodRating: doc.data().surpriseFoodRating,
+                    angryFoodRating: doc.data().angryFoodRating,
                     imageUrl: doc.data().imageUrl,
                     name: doc.data().name,
                     price: doc.data().price,
@@ -117,6 +118,12 @@ export const Products: React.FC = () => {
                             columnVisibilityModel: {
                                 id: false,
                                 transaction: false,
+                                ...(userInfo?.role === "owner" ? {
+                                    sadFoodRating: false,
+                                    surpriseFoodRating: false,
+                                    happyFoodRating: false,
+                                    angryFoodRating: false,
+                                } : {})
                             }
                         }
                     }}

@@ -1,3 +1,5 @@
+import { ColorValue } from "mui-color";
+
 export type LoginCreds = {
   email: string;
   password: string;
@@ -20,15 +22,44 @@ export type UserInformation = Omit<
 
 export type ProductInformation = {
   id?: string;
-  foodRating: number;
+  sadFoodRating: number;
+  happyFoodRating: number;
+  surpriseFoodRating: number;
+  angryFoodRating: number;
   image: File | null | string;
   name: string;
   price: number;
 }
 
+export type WebPageInformation = {
+  id?: string;
+  logo: File | null | string;
+  themeColor: string;
+  themeColorObj: ColorValue;
+  storeName: string;
+  slogan: string;
+  landingImage: File | null | string;
+  facebookPage: string;
+  contactNumber: string;
+}
+
+export type WebPage = {
+  id?: string;
+  logo: File | null | string;
+  themeColor: string;
+  storeName: string;
+  slogan: string;
+  landingImage: File | null | string;
+  facebookPage: string;
+  contactNumber: string;
+}
+
 export type Product = {
   id?: string;
-  foodRating: number;
+  sadFoodRating: number;
+  happyFoodRating: number;
+  surpriseFoodRating: number;
+  angryFoodRating: number;
   imageUrl: string;
   name: string;
   ownerEmail: string;
@@ -45,3 +76,12 @@ export type CurrentUser = {
     email: string,
     role: "owner" | "admin"
 }
+
+export type Customer = {
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  contact: string;
+  address: string;
+};

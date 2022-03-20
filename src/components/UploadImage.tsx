@@ -7,12 +7,22 @@ type Props = {
     name: string;
     defaultImage?: string;
     disabled?: boolean
+    style?: {
+        width: number | "full";
+        height: number;
+    }
+    imageStyle?: Record<string, string | number>
 }
 
-const UploadContainer = styled.div<{disabled: boolean}>`
+const UploadContainer = styled.div<{disabled: boolean, width?: number | "full", height?: number}>`
     border: 1px solid #d7d7d7;
-    width: 220px;
-    height: 220px;
+    width: ${({ width }) => {
+        if (width === "full") {
+            return "100%";
+        }
+        return `${width || 220}px`
+    }};
+    height: ${({ height }) => `${ height || 220}px`};
     border: 1px solid #d7d7d7;
     cursor: ${({ disabled }) => `${disabled ? "not-allowed" : "pointer"}`};
     overflow: hidden;
@@ -35,7 +45,7 @@ const Label = styled("label")`
     align-items: center;
 `
 
-const UploadImage: React.FC<Props> = ({ value, name, defaultImage, disabled = false, onChange }) => {
+const UploadImage: React.FC<Props> = ({ value, name, defaultImage, style, imageStyle = {}, disabled = false, onChange }) => {
 
     const handleImageChange = React.useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
         if (event?.target?.files && event?.target?.files[0]) {
@@ -45,18 +55,18 @@ const UploadImage: React.FC<Props> = ({ value, name, defaultImage, disabled = fa
     }, [])
 
     return (
-        <UploadContainer disabled={disabled}>
+        <UploadContainer disabled={disabled} width={style?.width} height={style?.height}>
             <Label
-                htmlFor="cafe-avatar"
+                htmlFor={`image-${name}`}
                 style={{ 
                     cursor: "pointer",
                     pointerEvents: disabled ? "none" : "auto"
                 }}
             >
-                {value && <Image alt="Cafe Avatar" src={typeof value === "string" ? value : URL.createObjectURL(value)} />}
-                {!value &&<DefaultIamge alt="Default Avatar" src={defaultImage || "/images/register-upload.png"} />}
+                {value && <Image style={{...imageStyle}} alt="Cafe Avatar" src={typeof value === "string" ? value : URL.createObjectURL(value)} />}
+                {!value && <DefaultIamge style={{...imageStyle}} alt="Default Avatar" src={defaultImage || "/images/register-upload.png"} />}
                 <input
-                    id="cafe-avatar"
+                    id={`image-${name}`}
                     type="file"
                     name={name}
                     onChange={handleImageChange}

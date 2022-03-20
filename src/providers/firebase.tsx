@@ -38,7 +38,9 @@ const firestoreRef = getFirestore();
 const authRef = getAuth();
 
 export const productsCollection = collection(firestoreRef, "products");
+export const webPagesCollection = collection(firestoreRef, "webPages");
 export const usersCollection = collection(firestoreRef, "users");
+export const customersCollection = collection(firestoreRef, "customers");
 export const signInEmailPassword = (email: string, password: string) =>
   signInWithEmailAndPassword(authRef, email, password);
   export const registerWithEmailPassword = (
@@ -73,3 +75,4 @@ const uploadImage = async (directory: string, file: File) => {
 
 export const uploadUsersImage = async (file: File) => await uploadImage('users', file);
 export const uploadProductImage = async (file: File) => await uploadImage('products', file);
+export const uploadWebPageImage = async (file: File) => await uploadImage('webPages', file);

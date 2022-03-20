@@ -11,18 +11,26 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import { Link, ListItemIcon } from '@mui/material';
-import { Link as RouteLink } from "react-router-dom";
-import { Help, Logout, AddBusiness } from '@mui/icons-material';
+import { ListItemIcon } from '@mui/material';
 import { signOut } from 'providers/firebase';
 import { useHomeNavigation } from 'context/navigationContext';
-import { pages } from 'constants/constants';
+import { getPageWithPermission } from 'constants/constants';
+import { useAuth } from 'context/authContext';
+import { Logout } from '@mui/icons-material';
 
 const HeaderNav: React.FC = () => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
   const { handleNavigation, selectedPageIndex } = useHomeNavigation();
+  const { userInfo } = useAuth();
+
+  const pages = React.useMemo(() => {
+    if (userInfo) {
+      return getPageWithPermission(userInfo.role);
+    }
+    return [];
+  }, [userInfo])
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => setAnchorElNav(event.currentTarget);
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => setAnchorElUser(event.currentTarget);
@@ -83,7 +91,7 @@ const HeaderNav: React.FC = () => {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              {pages.map(({ title, page }, index) => (
+              {pages.filter((page) => userInfo && page.permission.includes(userInfo.role)).map(({ title, page }, index) => (
                 <MenuItem
                   key={page}
                   onClick={() => handleNavigate(page, index)}
@@ -109,7 +117,7 @@ const HeaderNav: React.FC = () => {
             asdasd
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, alignItems: "center" }}>
-            {pages.map(({ title, page }, index) => (
+            {pages.filter((page) => userInfo && page.permission.includes(userInfo.role)).map(({ title, page }, index) => (
               <Button
                 key={page}
                 onClick={() => handleNavigate(page, index)}
@@ -171,33 +179,6 @@ const HeaderNav: React.FC = () => {
               transformOrigin={{ horizontal: 'right', vertical: 'top' }}
               anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
-              <MenuItem onClick={() => {
-                handleCloseUserMenu()
-                handleNavigate("/add-cafe", 3);
-              }}>
-                <RouteLink to="/add-cafe" style={{ color: "#315052", textDecoration: "none", display: "flex",  alignItems: "center" }}>
-                  <ListItemIcon>
-                    <AddBusiness fontSize="small" />
-                  </ListItemIcon>
-                  Add new Cafe
-                </RouteLink>
-              </MenuItem>
-              <MenuItem onClick={() => handleCloseUserMenu()}>
-                <Link
-                  href="https://huskee.co/swapsupport/"
-                  target="_blank"
-                  sx={{
-                    textDecoration: "none",
-                    display: "flex",
-                    alignItems: "center",
-                    width: "100%",
-                  }}>
-                  <ListItemIcon>
-                    <Help fontSize="small" />
-                  </ListItemIcon>
-                  Help
-                </Link>
-              </MenuItem>
               <MenuItem onClick={() => signOut()}>
                 <ListItemIcon  sx={{ display: "flex", alignItems: "center" }}>
                   <Logout fontSize="small" />

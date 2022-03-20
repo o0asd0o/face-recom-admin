@@ -1,8 +1,9 @@
-import { pages } from "constants/constants";
+import { getPageWithPermission, pages } from "constants/constants";
 import React, { useCallback, useEffect } from "react";
 import { useContext, useState } from "react";
 import { createContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "./authContext";
 
 type NavigationContextType = {
     selectedPage: string,
@@ -19,17 +20,26 @@ export function NavigationProvider({ children }: { children: JSX.Element }) {
     const [selectedPageIndex, setSelectedPageIndex] = useState<number>(0);
     const [prevPageIndex, setPrevPageIndex] = useState<number>(0);
 
+    const { userInfo } = useAuth();
+
+    const allPages = React.useMemo(() => {
+        if (userInfo) {
+            return getPageWithPermission(userInfo.role);
+        }
+        return pages;
+    }, [userInfo])
+
     const navigate = useNavigate();
     const location = useLocation();
 
     useEffect(() => {
         setTimeout(() => {
             const pathName = location.pathname;
-            const index = pages.findIndex((item) => item.page === pathName);
+            const index = allPages.findIndex((item) => item.page === pathName);
             setSelectedPageIndex(index)
         }, 0);
 
-    }, [location.pathname])
+    }, [location.pathname, allPages])
 
     const handleNavigation = useCallback((page: string, index: number = selectedPageIndex) => {
         setSelectedPage(page);

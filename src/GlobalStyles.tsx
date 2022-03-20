@@ -14,7 +14,6 @@ const GlobalStyles: React.FC = () => (
                     url('/fonts/Rubik-Regular.ttf') format('truetype');
             }
 
-
             body  {
                 background-color: rgba(103,151,140,0.12) !important;
             }

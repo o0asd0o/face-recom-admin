@@ -13,11 +13,27 @@ export type UserData = {
 };
 
 export type ProductData =  {
-    foodRating: number;
+    sadFoodRating: number;
+    happyFoodRating: number;
+    surpriseFoodRating: number;
+    angryFoodRating: number;
     imageUrl: string;
     name: string;
     price: number;
     ownerEmail?: string;
     createdDate?: FieldValue,
     updatedDate?: FieldValue,
+}
+
+export type WebPageData = {
+    logoUrl: string;
+    themeColor: string;
+    storeName: string;
+    description: string;
+    landingImageUrl: string;
+    facebookPage: string;
+    contactNumber: string;
+    ownerEmail?: string;
+    updated?: boolean;
+    updatedDate?: FieldValue;
 }
