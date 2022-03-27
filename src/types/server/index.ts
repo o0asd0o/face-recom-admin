@@ -29,12 +29,14 @@ export type ProductData =  {
 
 export type WebPageData = {
     logoUrl: string;
+    featuredUrl: string;
     themeColor: string;
     storeName: string;
     description: string;
     landingImageUrl: string;
     facebookPage: string;
     contactNumber: string;
+    address?: string;
     ownerEmail?: string;
     updated?: boolean;
     updatedDate?: FieldValue;

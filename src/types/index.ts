@@ -37,6 +37,7 @@ export type ProductInformation = {
 export type WebPageInformation = {
   id?: string;
   logo: File | null | string;
+  featured: File | null | string;
   themeColor: string;
   themeColorObj: ColorValue;
   storeName: string;
@@ -44,17 +45,20 @@ export type WebPageInformation = {
   landingImage: File | null | string;
   facebookPage: string;
   contactNumber: string;
+  address: string;
 }
 
 export type WebPage = {
   id?: string;
   logo: File | null | string;
+  featured: File | null | string;
   themeColor: string;
   storeName: string;
   slogan: string;
   landingImage: File | null | string;
   facebookPage: string;
   contactNumber: string;
+  addres: string;
 }
 
 export type Product = {

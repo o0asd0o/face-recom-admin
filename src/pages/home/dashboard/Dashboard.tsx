@@ -30,8 +30,6 @@ export const Customers: React.FC = () => {
         }
     }, [userInfo?.email]);
 
-    console.log({ userInfo })
-
     return (
         <Container maxWidth="xl">
             <Stack direction="row" alignItems="center" >
@@ -88,11 +86,6 @@ export const Customers: React.FC = () => {
                     </Card>
                 </Grid>
             </Grid>
-            <Stack sx={{ width: '100%', mt: 2 }} spacing={3} direction="row">
-                
-                
-                
-            </Stack>
         </Container>
     )
 };

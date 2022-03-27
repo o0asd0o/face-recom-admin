@@ -231,7 +231,7 @@ const EditProductForm: React.FC<Props> = ({ onBack }) => {
               <TextField
                   fullWidth
                   name="surpriseFoodRating"
-                  label="Happy Food Rating (0-12)"
+                  label="Surprise Food Rating (0-12)"
                   variant="outlined"
                   inputProps={{ min: 0, max: 12 }}
                   type="number"
@@ -248,7 +248,7 @@ const EditProductForm: React.FC<Props> = ({ onBack }) => {
               <TextField
                   fullWidth
                   name="angryFoodRating"
-                  label="Sad Food Rating (0-12)"
+                  label="Angry Food Rating (0-12)"
                   variant="outlined"
                   inputProps={{ min: 0, max: 12 }}
                   type="number"
@@ -263,7 +263,6 @@ const EditProductForm: React.FC<Props> = ({ onBack }) => {
                   helperText={form.touched.angryFoodRating && form.errors.angryFoodRating}
               />
             </>)}
-            
           </Stack>
         </Grid>
       </Grid>

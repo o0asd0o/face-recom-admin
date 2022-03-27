@@ -41,7 +41,7 @@ const handleSubmit = async ({ password, ...otherDetails}: RegistrationDetails) =
         }
 
         const userData: UserData = mapUserData(otherDetails, userImagePath);
-        const webPageData: WebPageData = mapDefaultWebPageData(otherDetails.email);
+        const webPageData: WebPageData = mapDefaultWebPageData(otherDetails.email, otherDetails.address);
 
         await addDoc(webPagesCollection, webPageData)
         await addDoc(usersCollection, userData);
@@ -54,7 +54,6 @@ const handleSubmit = async ({ password, ...otherDetails}: RegistrationDetails) =
             render: (err) => {
                 const { data } = err;
                 const error = data as { code: string };
-                console.log(err);
                 if (error.code === 'auth/email-already-in-use') {
                     return 'That email address is already in use!';
                 } else if (error.code === 'auth/invalid-email') {

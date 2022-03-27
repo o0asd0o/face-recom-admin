@@ -26,7 +26,7 @@ import { palette } from "themes/themes";
 import { BannerContainer } from "./styled/WebPageStyled";
 import { mapWebPageDataForUpdate } from "utils/mappers/webPageMappers";
 import { WebPageData } from "types/server";
-import { Call, Facebook, FindReplace } from "@mui/icons-material";
+import { Call, Facebook, FindReplace, Room } from "@mui/icons-material";
 import styles from "./WebPageConfigForm.module.scss";
 
 export const Form = styled("form")`
@@ -43,13 +43,15 @@ const validation = yup.object({
 
 const initialValues: WebPageInformation = {
   logo: null,
-  themeColor: "",
+  featured: null,
+  themeColor: "#333",
   themeColorObj: "#333",
   storeName: "",
   slogan: "",
   landingImage: "",
   facebookPage: "",
-  contactNumber: ""
+  contactNumber: "",
+  address: ""
 };
 
 const WebPageConfigForm: React.FC = () => {
@@ -67,12 +69,17 @@ const WebPageConfigForm: React.FC = () => {
                 logoImagePath = await uploadWebPageImage(values.logo);
             }
 
+            let featuredImagePath = "";
+            if (typeof values.featured !== "string" && values.featured !== null) {
+                featuredImagePath = await uploadWebPageImage(values.featured);
+            }
+
             let bannerImagePath = "";
             if (typeof values.landingImage !== "string" && values.landingImage !== null) {
                 bannerImagePath = await uploadWebPageImage(values.landingImage);
             }
 
-            const webPageData: WebPageData = mapWebPageDataForUpdate(values, logoImagePath, bannerImagePath);
+            const webPageData: WebPageData = mapWebPageDataForUpdate(values, logoImagePath, featuredImagePath, bannerImagePath);
 
             if (!currentWebPage?.id) {
               throw Error('Error');
@@ -108,13 +115,15 @@ const WebPageConfigForm: React.FC = () => {
             webPageResult.push({
                 id: doc.id,
                 logo: doc.data().logoUrl,
+                featured: doc.data().featuredUrl,
                 storeName: doc.data().storeName,
                 slogan: doc.data().description,
                 themeColor: doc.data().themeColor,
                 landingImage: doc.data().landingImageUrl,
                 themeColorObj: createColor(doc.data().themeColor),
                 facebookPage: doc.data().facebookPage,
-                contactNumber: doc.data().contactNumber
+                contactNumber: doc.data().contactNumber,
+                address: doc.data().address,
             });
         });
 
@@ -166,10 +175,31 @@ const WebPageConfigForm: React.FC = () => {
               value={form.values.logo}
               onChange={(file) => form.setFieldValue("logo", file)}
               defaultImage="/images/logo-placeholder.png"
-              name="image"
+              name="logogImage"
             />
             {form.errors.logo && (
               <ErrorMessage>{form.errors.logo}</ErrorMessage>
+            )}
+          </AvatarContainer>
+          <AvatarContainer style={{ marginTop: "40px"}}>
+            <Typography
+              variant="caption"
+              sx={{
+                position: "absolute",
+                top: "-20px",
+                fontStyle: "italic",
+              }}
+            >
+              Featured Image:
+            </Typography>
+            <UploadImage
+              value={form.values.featured}
+              onChange={(file) => form.setFieldValue("featured", file)}
+              defaultImage="/images/image-placeholder.png"
+              name="featuredImage"
+            />
+            {form.errors.featured && (
+              <ErrorMessage>{form.errors.featured}</ErrorMessage>
             )}
           </AvatarContainer>
         </Grid>
@@ -180,6 +210,7 @@ const WebPageConfigForm: React.FC = () => {
           sx={{
             display: "flex",
             flexDirection: "column",
+            justifyContent: "center"
           }}
         >
           <Stack spacing={2}>
@@ -228,6 +259,20 @@ const WebPageConfigForm: React.FC = () => {
               InputProps={{
                   endAdornment:<Facebook />
               }}
+              sx={{ mt: 2 }}
+            />
+             <TextField
+              fullWidth
+              name="address"
+              label="Address"
+              variant="outlined"
+              autoComplete="off"
+              value={form.values.address || ""}
+              onBlur={form.handleBlur}
+              onChange={form.handleChange}
+              error={form.touched.address && Boolean(form.errors.address)}
+              helperText={form.touched.address && form.errors.address}
+              InputProps={{ endAdornment:<Room /> }}
               sx={{ mt: 2 }}
             />
             <TextField

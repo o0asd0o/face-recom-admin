@@ -5,6 +5,7 @@ import { WebPageData } from "types/server";
 const mapWebPageData = (
   data: WebPageInformation,
   logoImagePath: string,
+  featuredImagePath: string,
   bannerImagePath: string,
 ): WebPageData => {
 
@@ -14,18 +15,21 @@ const mapWebPageData = (
         description: data.slogan,
         facebookPage: data.facebookPage,
         contactNumber: data.contactNumber,
+        address: data.address,
         landingImageUrl: bannerImagePath || String(data.landingImage),
         logoUrl: logoImagePath || String(data.logo),
+        featuredUrl: featuredImagePath || String(data.featured),
     };
 };
 
 export const mapWebPageDataForAdd = (
     data: WebPageInformation,
     logoImagePath: string,
+    featuredImagePath: string,
     bannerImagePath: string,
     ownerEmail: string
 ) => {
-  const webPageData = mapWebPageData(data, logoImagePath, bannerImagePath);
+  const webPageData = mapWebPageData(data, logoImagePath, featuredImagePath, bannerImagePath);
   return {
     ...webPageData,
     ownerEmail: ownerEmail,
@@ -36,9 +40,10 @@ export const mapWebPageDataForAdd = (
 export const mapWebPageDataForUpdate = (
     data: WebPageInformation,
     logoImagePath: string,
+    featuredImagePath: string,
     bannerImagePath: string
 ) => {
-  const webPageData = mapWebPageData(data, logoImagePath, bannerImagePath);
+  const webPageData = mapWebPageData(data, logoImagePath, featuredImagePath, bannerImagePath);
   return {
     ...webPageData,
     updated: true,
@@ -47,12 +52,14 @@ export const mapWebPageDataForUpdate = (
 }
 
 
-export const mapDefaultWebPageData = (email: string) => {
+export const mapDefaultWebPageData = (email: string, address: string) => {
   return {
     ownerEmail: email,
+    address,
     description: "",
     landingImageUrl: "",
     logoUrl: "",
+    featuredUrl: "",
     storeName: "",
     themeColor: "",
     facebookPage: "",

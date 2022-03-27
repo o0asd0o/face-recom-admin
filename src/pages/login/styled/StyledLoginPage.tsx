@@ -38,6 +38,8 @@ export const Form = styled("form")`
 
     @media screen and (max-width: 900px) {
         width: 100%;
+        padding-left: 20px;
+        padding-right: 20px;
     }
 `
 
