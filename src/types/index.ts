@@ -32,6 +32,7 @@ export type ProductInformation = {
   image: File | null | string;
   name: string;
   price: number;
+  categories: string[];
 }
 
 export type WebPageInformation = {
@@ -71,6 +72,7 @@ export type Product = {
   name: string;
   ownerEmail: string;
   price: number;
+  categories: string[];
 }
 
 export type CurrentUser = { 

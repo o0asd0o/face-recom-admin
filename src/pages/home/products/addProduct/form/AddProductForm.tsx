@@ -25,6 +25,7 @@ import { validateFileSize } from "utils/helpers";
 import { ProductData } from "types/server";
 import { addDoc } from "firebase/firestore";
 import { useAuth } from "context/authContext";
+import CategoryInput from "components/CategoryInput";
 
 type Props = {
   onBack: () => void;
@@ -56,6 +57,12 @@ const validation = yup.object({
         ),
     name: yup.string().required("Product name is required"),
     price: yup.number().required("Price is required"),
+    categories: yup.array().of(
+      yup.string()
+          .max(255)
+          .required()
+    )
+    .min(1, 'Please fill at least 1 category')
 });
 
 const initialValues: ProductInformation = {
@@ -66,6 +73,7 @@ const initialValues: ProductInformation = {
   image: null,
   name: "",
   price: 1,
+  categories: [],
 };
 
 const AddProductForm: React.FC<Props> = ({ onBack }) => {
@@ -73,7 +81,7 @@ const AddProductForm: React.FC<Props> = ({ onBack }) => {
   const { userInfo } = useAuth();
 
   const handleAddProduct = React.useCallback(
-    async ({ roasterInput: _, ...values }) => {
+    async (values: ProductInformation) => {
         setLoading(true);
 
         const addProductProcesses = async () => {
@@ -246,6 +254,14 @@ const AddProductForm: React.FC<Props> = ({ onBack }) => {
                   }}
                   error={form.touched.angryFoodRating && Boolean(form.errors.angryFoodRating)}
                   helperText={form.touched.angryFoodRating && form.errors.angryFoodRating }
+              />
+              <CategoryInput
+                fullWidth
+                autoComplete="off"
+                name="categories"
+                label="Food Category"
+                variant="outlined"
+                form={form}
               />
             </>)}
           </Stack>

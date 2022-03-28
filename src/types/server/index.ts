@@ -25,6 +25,7 @@ export type ProductData =  {
     ownerEmail?: string;
     createdDate?: FieldValue,
     updatedDate?: FieldValue,
+    categories: string[],
 }
 
 export type WebPageData = {

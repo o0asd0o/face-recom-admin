@@ -44,6 +44,7 @@ export const Products: React.FC = () => {
                     imageUrl: doc.data().imageUrl,
                     name: doc.data().name,
                     price: doc.data().price,
+                    categories: doc.data().categories || [],
                 });
             });
 

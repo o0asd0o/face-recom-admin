@@ -25,6 +25,7 @@ import { useAuth } from "context/authContext";
 import styled from "@emotion/styled";
 import { onProductsSnapshot, updateProductDoc } from "providers/products";
 import { useParams } from "react-router-dom";
+import CategoryInput from "components/CategoryInput";
 
 type Props = {
   onBack: () => void;
@@ -54,6 +55,7 @@ const initialValues: ProductInformation = {
   image: null,
   name: "",
   price: 1,
+  categories: [],
 };
 
 const EditProductForm: React.FC<Props> = ({ onBack }) => {
@@ -113,6 +115,7 @@ const EditProductForm: React.FC<Props> = ({ onBack }) => {
                 image: doc.data().imageUrl,
                 name: doc.data().name,
                 price: doc.data().price,
+                categories: doc.data().categories || [],
             });
         });
 
@@ -261,6 +264,14 @@ const EditProductForm: React.FC<Props> = ({ onBack }) => {
                   }}
                   error={form.touched.angryFoodRating && Boolean(form.errors.angryFoodRating)}
                   helperText={form.touched.angryFoodRating && form.errors.angryFoodRating}
+              />
+              <CategoryInput
+                fullWidth
+                autoComplete="off"
+                name="categories"
+                label="Food Category"
+                variant="outlined"
+                form={form}
               />
             </>)}
           </Stack>

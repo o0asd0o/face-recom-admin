@@ -14,6 +14,7 @@ const mapProductData = (
       imageUrl: productImagePath,
       name: data.name,
       price: data.price,
+      categories: data.categories,
   };
 };
 

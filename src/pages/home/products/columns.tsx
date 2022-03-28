@@ -1,7 +1,8 @@
 import React from "react";
 import { GridColumns } from "@mui/x-data-grid";
-import { IconButton, Stack, Link, Tooltip } from "@mui/material";
-import { Delete, Edit } from "@mui/icons-material";
+import { IconButton, Stack, Link, Tooltip, Chip } from "@mui/material";
+import { Delete, Edit, InfoOutlined } from "@mui/icons-material";
+import ScrollContainer from "react-indiana-drag-scroll";
 
 type ColumnProps = {
   onDelete(productId: string): void; 
@@ -20,29 +21,49 @@ export const columns = (props: ColumnProps): GridColumns => {
     {
       field: 'price',
       headerName: 'Price',
-      flex: 0.5,
-      minWidth: 150,
+      width: 150,
     },
     {
       field: 'happyFoodRating',
       headerName: 'Happy Rating',
-      width: 150,
+      width: 130,
     },
     {
       field: 'sadFoodRating',
       headerName: 'Sad Rating',
-      width: 150,
+      width: 130,
     },
     {
       field: 'surpriseFoodRating',
       headerName: 'Surprise Rating',
-      width: 150,
+      width: 130,
     },
     {
       field: 'angryFoodRating',
       headerName: 'Angry Rating',
-      width: 150,
+      width: 130,
     },
+    {
+      field: 'categories',
+      renderHeader: () => {
+        return <>
+          <span>Categories</span>
+          <Tooltip title="Drag cell to see cutoff ones" placement="top">
+              <InfoOutlined fontSize="small" sx={{ color: "rgba(0,0,0,0.54)", marginLeft: "4px" }} />
+          </Tooltip>
+        </>;
+      },
+      valueGetter: (params) => params.row.categories.join(" ") || "-",
+      renderCell: (params) => (
+        <ScrollContainer>
+          {params.row.categories
+              ? params.row.categories.map((item: string) =>  <Chip key={item} label={item} />)
+              : null}
+        </ScrollContainer>
+      ),
+      width: 200,
+    },
+    
     {
       field: 'imageUrl',
       headerName: 'Image URL',
@@ -64,7 +85,7 @@ export const columns = (props: ColumnProps): GridColumns => {
           
         )
       },
-      width: 200,
+      width: 150,
     },
     {
       field: 'action',
