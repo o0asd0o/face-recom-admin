@@ -255,15 +255,15 @@ const AddProductForm: React.FC<Props> = ({ onBack }) => {
                   error={form.touched.angryFoodRating && Boolean(form.errors.angryFoodRating)}
                   helperText={form.touched.angryFoodRating && form.errors.angryFoodRating }
               />
-              <CategoryInput
-                fullWidth
-                autoComplete="off"
-                name="categories"
-                label="Food Category"
-                variant="outlined"
-                form={form}
-              />
             </>)}
+            <CategoryInput
+              fullWidth
+              autoComplete="off"
+              name="categories"
+              label="Food Category"
+              variant="outlined"
+              form={form}
+            />
           </Stack>
         </Grid>
       </Grid>
