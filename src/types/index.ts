@@ -33,6 +33,7 @@ export type ProductInformation = {
   name: string;
   price: number;
   categories: string[];
+  ownerEmail?: string
 }
 
 export type WebPageInformation = {

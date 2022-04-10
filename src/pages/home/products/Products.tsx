@@ -24,6 +24,7 @@ export const Products: React.FC = () => {
     const [currentProductToDelete, setCurrentProductToDelete] = React.useState<string>();
     const [deleteOpen, setDeleteOpen] = React.useState<boolean>(false);
     const { userInfo } = useAuth();
+    
     const { handleNavigation } = useHomeNavigation();
 
     React.useEffect(() => {
@@ -125,6 +126,7 @@ export const Products: React.FC = () => {
                                     surpriseFoodRating: false,
                                     happyFoodRating: false,
                                     angryFoodRating: false,
+                                    ownerEmail: false,
                                 } : {})
                             }
                         }

@@ -17,15 +17,16 @@ import {
 import UploadImage from "components/UploadImage";
 import { uploadProductImage } from "providers/firebase";
 import { toast } from "react-toastify";
-import { Product, ProductInformation } from "types";
+import { ProductInformation } from "types";
 import { mapProductDataForUpdate } from "utils/mappers/productMappers";
-import { validateFileSize } from "utils/helpers";
 import { ProductData } from "types/server";
 import { useAuth } from "context/authContext";
 import styled from "@emotion/styled";
 import { onProductsSnapshot, updateProductDoc } from "providers/products";
 import { useParams } from "react-router-dom";
 import CategoryInput from "components/CategoryInput";
+import ComboBoxSearch from "components/ComboBoxSearch";
+import { onUsersSnapshot } from "providers/users";
 
 type Props = {
   onBack: () => void;
@@ -56,13 +57,27 @@ const initialValues: ProductInformation = {
   name: "",
   price: 1,
   categories: [],
+  ownerEmail: ""
 };
 
 const EditProductForm: React.FC<Props> = ({ onBack }) => {
   const [loading, setLoading] = React.useState<boolean>(false);
   const [selectedProduct, setSelectedProduct] = useState<ProductInformation>();
+  const [ownerEmails, setOwnerEmails] = React.useState<string[]>([]);
+
   const { userInfo } = useAuth();
   const { productId } = useParams(); 
+
+  useEffect(() => { 
+    const unsub = onUsersSnapshot((snapshot) => {
+      const users: string[] = [];
+      snapshot.forEach((doc) => users.push(doc.data().email));
+
+      setOwnerEmails(users);
+    }, 'owner');
+
+    return () => unsub();
+  }, []);
 
   const handleUpdateProduct = React.useCallback(
     async ({ id, ...values }) => {
@@ -98,6 +113,7 @@ const EditProductForm: React.FC<Props> = ({ onBack }) => {
     enableReinitialize: true,
     onSubmit: handleUpdateProduct,
   });
+
   useEffect(() => {
     if (!userInfo?.email || !userInfo.role) return;
     const { email, role } = userInfo;
@@ -116,6 +132,7 @@ const EditProductForm: React.FC<Props> = ({ onBack }) => {
                 name: doc.data().name,
                 price: doc.data().price,
                 categories: doc.data().categories || [],
+                ownerEmail: doc.data().ownerEmail
             });
         });
 
@@ -274,6 +291,17 @@ const EditProductForm: React.FC<Props> = ({ onBack }) => {
               variant="outlined"
               form={form}
             />
+            {userInfo?.role === "admin" && (
+              <ComboBoxSearch
+                fullWidth
+                items={ownerEmails}
+                autoComplete="off"
+                name="ownerEmail"
+                label="Owner Email"
+                variant="outlined"
+                form={form}
+              />
+            )}
           </Stack>
         </Grid>
       </Grid>

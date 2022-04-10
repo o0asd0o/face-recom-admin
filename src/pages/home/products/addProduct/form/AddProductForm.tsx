@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useFormik } from "formik";
-import React from "react";
+import React, { useEffect } from "react";
 import { Form } from "./styled/StyledAddProduct";
 import * as yup from "yup";
 import {
@@ -26,6 +26,8 @@ import { ProductData } from "types/server";
 import { addDoc } from "firebase/firestore";
 import { useAuth } from "context/authContext";
 import CategoryInput from "components/CategoryInput";
+import ComboBoxSearch from "components/ComboBoxSearch";
+import { onUsersSnapshot } from "providers/users";
 
 type Props = {
   onBack: () => void;
@@ -62,7 +64,8 @@ const validation = yup.object({
           .max(255)
           .required()
     )
-    .min(1, 'Please fill at least 1 category')
+    .min(1, 'Please fill at least 1 category'),
+    ownerEmail: yup.string()
 });
 
 const initialValues: ProductInformation = {
@@ -74,14 +77,34 @@ const initialValues: ProductInformation = {
   name: "",
   price: 1,
   categories: [],
+  ownerEmail: ""
 };
 
 const AddProductForm: React.FC<Props> = ({ onBack }) => {
   const [loading, setLoading] = React.useState<boolean>(false);
+  const [ownerEmails, setOwnerEmails] = React.useState<string[]>([]);
+
   const { userInfo } = useAuth();
+
+  useEffect(() => { 
+    const unsub = onUsersSnapshot((snapshot) => {
+      const users: string[] = [];
+      snapshot.forEach((doc) => users.push(doc.data().email));
+
+      setOwnerEmails(users);
+    }, 'owner');
+
+    return () => unsub();
+  }, []);
 
   const handleAddProduct = React.useCallback(
     async (values: ProductInformation) => {
+
+        if (!values.ownerEmail && userInfo?.role === 'admin') {
+          toast.error("Owner Email is required!");
+          return;
+        }
+
         setLoading(true);
 
         const addProductProcesses = async () => {
@@ -90,10 +113,11 @@ const AddProductForm: React.FC<Props> = ({ onBack }) => {
                 productImagePath = await uploadProductImage(values.image);
             }
 
+            const ownerEmail = userInfo?.role === 'admin' ? values.ownerEmail : userInfo?.email;
             const productData: ProductData = mapProductDataForAdd(
                 values,
                 productImagePath,
-                userInfo?.email || ''
+                ownerEmail || ''
             );
             await addDoc(productsCollection, productData);
 
@@ -264,6 +288,18 @@ const AddProductForm: React.FC<Props> = ({ onBack }) => {
               variant="outlined"
               form={form}
             />
+
+            {userInfo?.role === "admin" && (
+              <ComboBoxSearch
+                fullWidth
+                items={ownerEmails}
+                autoComplete="off"
+                name="ownerEmail"
+                label="Owner Email"
+                variant="outlined"
+                form={form}
+              />
+            )}
           </Stack>
         </Grid>
       </Grid>

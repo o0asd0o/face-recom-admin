@@ -63,6 +63,12 @@ export const columns = (props: ColumnProps): GridColumns => {
       ),
       width: 200,
     },
+
+    {
+      field: 'ownerEmail',
+      headerName: 'Owner Email',
+      width: 150,
+    },
     
     {
       field: 'imageUrl',

@@ -32,6 +32,7 @@ export const mapProductDataForUpdate = (data: ProductInformation, productImagePa
   const productData = mapProductData(data, productImagePath);
   return {
     ...productData,
+    ownerEmail: data.ownerEmail,
     updatedDate: serverTimestamp(),
   };
 }

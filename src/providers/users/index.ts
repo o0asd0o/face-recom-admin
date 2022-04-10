@@ -1,5 +1,18 @@
-import { getDocs, where, query } from "firebase/firestore";
+import { getDocs, where, query, onSnapshot, QuerySnapshot, DocumentData } from "firebase/firestore";
 import { usersCollection } from "providers/firebase";
+
+export const onUsersSnapshot = (
+  observer: (snashot: QuerySnapshot<DocumentData>) => void,
+  role?: "admin" | "owner"
+) => {
+  let resQuery = query(usersCollection);
+
+  if (role) {
+    resQuery = query(usersCollection, where('role', '==', role));
+  } 
+
+  return onSnapshot(resQuery, observer)
+};
 
 export const emailExists = async (
     email: string

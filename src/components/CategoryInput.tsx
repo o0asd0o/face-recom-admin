@@ -29,11 +29,11 @@ const CATEGORY_ITEMS = [
     "SEAFOOD",
     "VEGETABLES",
     "BEVERAGES",
-    "RAMEN NOODLES",
+    "NOODLES",
     "PIZZA",
     "BURGER",
     "FRIES",
-    "DESSERT",
+    "MAKI",
     "RICE MEALS",
 ];
 
@@ -47,7 +47,7 @@ const CategoryInput: React.FC<Props> = ({ form, name, disabled, ...inputProps}) 
             defaultValue={[]}
             onBlur={form.handleBlur}
             filterSelectedOptions
-            value={form.values.categories}
+            value={form.values.categories} 
             onChange={(_, v: string[]) => form.setFieldValue(name, v)}
             disabled={disabled}
             renderTags={(
