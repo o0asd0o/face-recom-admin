@@ -29,16 +29,14 @@ import { WebPageData } from "types/server";
 import { Call, Facebook, FindReplace, Room } from "@mui/icons-material";
 import styles from "./WebPageConfigForm.module.scss";
 
-export const Form = styled("form")`
-
-`
+export const Form = styled("form")``;
 
 const validation = yup.object({
-    logo: yup.mixed(),
-    themeColor: yup.string(),
-    storeName: yup.string().required("Store Name is required"),
-    slogan: yup.string().required("Slogan/Description is required"),
-    landingImage: yup.mixed(),
+  logo: yup.mixed(),
+  themeColor: yup.string(),
+  storeName: yup.string().required("Store Name is required"),
+  slogan: yup.string().required("Slogan/Description is required"),
+  landingImage: yup.mixed(),
 });
 
 const initialValues: WebPageInformation = {
@@ -51,7 +49,7 @@ const initialValues: WebPageInformation = {
   landingImage: "",
   facebookPage: "",
   contactNumber: "",
-  address: ""
+  address: "",
 };
 
 const WebPageConfigForm: React.FC = () => {
@@ -61,37 +59,46 @@ const WebPageConfigForm: React.FC = () => {
 
   const handleUpdateWebPage = React.useCallback(
     async ({ id, ...values }: WebPageInformation) => {
-        setLoading(true);
+      setLoading(true);
 
-        const editWebPageProcesses = async () => {
-            let logoImagePath = "";
-            if (typeof values.logo !== "string" && values.logo !== null) {
-                logoImagePath = await uploadWebPageImage(values.logo);
-            }
+      const editWebPageProcesses = async () => {
+        let logoImagePath = "";
+        if (typeof values.logo !== "string" && values.logo !== null) {
+          logoImagePath = await uploadWebPageImage(values.logo);
+        }
 
-            let featuredImagePath = "";
-            if (typeof values.featured !== "string" && values.featured !== null) {
-                featuredImagePath = await uploadWebPageImage(values.featured);
-            }
+        let featuredImagePath = "";
+        if (typeof values.featured !== "string" && values.featured !== null) {
+          featuredImagePath = await uploadWebPageImage(values.featured);
+        }
 
-            let bannerImagePath = "";
-            if (typeof values.landingImage !== "string" && values.landingImage !== null) {
-                bannerImagePath = await uploadWebPageImage(values.landingImage);
-            }
+        let bannerImagePath = "";
+        if (
+          typeof values.landingImage !== "string" &&
+          values.landingImage !== null
+        ) {
+          bannerImagePath = await uploadWebPageImage(values.landingImage);
+        }
 
-            const webPageData: WebPageData = mapWebPageDataForUpdate(values, logoImagePath, featuredImagePath, bannerImagePath);
+        const webPageData: WebPageData = mapWebPageDataForUpdate(
+          values,
+          logoImagePath,
+          featuredImagePath,
+          bannerImagePath
+        );
 
-            if (!currentWebPage?.id) {
-              throw Error('Error');
-            }
+        if (!currentWebPage?.id) {
+          throw Error("Error");
+        }
 
-            await updateWebPageDoc(currentWebPage?.id, webPageData);
-        };
+        await updateWebPageDoc(currentWebPage?.id, webPageData);
+      };
 
-        return await toast.promise(editWebPageProcesses, {
-            pending: "Updating web page...",
-            success: "Successfuly updated web page!",
-            error: "Error while processing the request",
+      return await toast
+        .promise(editWebPageProcesses, {
+          pending: "Updating web page...",
+          success: "Successfuly updated web page!",
+          error: "Error while processing the request",
         })
         .finally(() => setLoading(false));
     },
@@ -110,34 +117,37 @@ const WebPageConfigForm: React.FC = () => {
     setLoading(true);
 
     const unsub = onWebPageSnapshot((snapshot) => {
-        const webPageResult: Array<WebPageInformation> = [];
-        snapshot.forEach((doc) => {
-            webPageResult.push({
-                id: doc.id,
-                logo: doc.data().logoUrl,
-                featured: doc.data().featuredUrl,
-                storeName: doc.data().storeName,
-                slogan: doc.data().description,
-                themeColor: doc.data().themeColor,
-                landingImage: doc.data().landingImageUrl,
-                themeColorObj: createColor(doc.data().themeColor),
-                facebookPage: doc.data().facebookPage,
-                contactNumber: doc.data().contactNumber,
-                address: doc.data().address,
-            });
+      const webPageResult: Array<WebPageInformation> = [];
+      snapshot.forEach((doc) => {
+        webPageResult.push({
+          id: doc.id,
+          logo: doc.data().logoUrl,
+          featured: doc.data().featuredUrl,
+          storeName: doc.data().storeName,
+          slogan: doc.data().description,
+          themeColor: doc.data().themeColor,
+          landingImage: doc.data().landingImageUrl,
+          themeColorObj: createColor(doc.data().themeColor),
+          facebookPage: doc.data().facebookPage,
+          contactNumber: doc.data().contactNumber,
+          address: doc.data().address,
         });
+      });
 
-        setCurretWebPage(webPageResult[0]);
-        setLoading(false);
+      setCurretWebPage(webPageResult[0]);
+      setLoading(false);
     }, userInfo?.email);
 
     return () => unsub();
   }, [userInfo?.email]);
 
-  const handleChange = React.useCallback((value: Color) => {
-    form.setFieldValue('themeColorObj', value);
-    form.setFieldValue('themeColor', value.raw);
-  }, [form]);
+  const handleChange = React.useCallback(
+    (value: Color) => {
+      form.setFieldValue("themeColorObj", value);
+      form.setFieldValue("themeColor", value.raw);
+    },
+    [form]
+  );
 
   return (
     <Form onSubmit={form.handleSubmit}>
@@ -157,7 +167,7 @@ const WebPageConfigForm: React.FC = () => {
           sx={{
             display: "flex",
             flexDirection: "column",
-            justifyContent: "center"
+            justifyContent: "center",
           }}
         >
           <AvatarContainer>
@@ -181,7 +191,7 @@ const WebPageConfigForm: React.FC = () => {
               <ErrorMessage>{form.errors.logo}</ErrorMessage>
             )}
           </AvatarContainer>
-          <AvatarContainer style={{ marginTop: "40px"}}>
+          <AvatarContainer style={{ marginTop: "40px" }}>
             <Typography
               variant="caption"
               sx={{
@@ -206,15 +216,15 @@ const WebPageConfigForm: React.FC = () => {
         <Grid
           item
           xs={12}
-          sm={6}   
+          sm={6}
           sx={{
             display: "flex",
             flexDirection: "column",
-            justifyContent: "center"
+            justifyContent: "center",
           }}
         >
           <Stack spacing={2}>
-           <TextField
+            <TextField
               fullWidth
               name="storeName"
               label="Store Name"
@@ -239,10 +249,13 @@ const WebPageConfigForm: React.FC = () => {
               helperText={form.touched.slogan && form.errors.slogan}
             />
             <div className={styles.themeColor}>
-              <Typography>
-                Choose Theme Color
-              </Typography>
-              <ColorPicker value={form.values.themeColorObj} palette={palette} onChange={(value) => handleChange(value as Color)} />
+              <Typography>Choose Theme Color</Typography>
+              <ColorPicker
+                disableTextfield
+                value={form.values.themeColorObj}
+                palette={palette}
+                onChange={(value) => handleChange(value as Color)}
+              />
             </div>
             <Divider sx={{ mb: 2, mt: 2 }} />
             <TextField
@@ -254,14 +267,16 @@ const WebPageConfigForm: React.FC = () => {
               value={form.values.facebookPage || ""}
               onBlur={form.handleBlur}
               onChange={form.handleChange}
-              error={form.touched.facebookPage && Boolean(form.errors.facebookPage)}
+              error={
+                form.touched.facebookPage && Boolean(form.errors.facebookPage)
+              }
               helperText={form.touched.facebookPage && form.errors.facebookPage}
               InputProps={{
-                  endAdornment:<Facebook />
+                endAdornment: <Facebook />,
               }}
               sx={{ mt: 2 }}
             />
-             <TextField
+            <TextField
               fullWidth
               name="address"
               label="Address"
@@ -272,7 +287,7 @@ const WebPageConfigForm: React.FC = () => {
               onChange={form.handleChange}
               error={form.touched.address && Boolean(form.errors.address)}
               helperText={form.touched.address && form.errors.address}
-              InputProps={{ endAdornment:<Room /> }}
+              InputProps={{ endAdornment: <Room /> }}
               sx={{ mt: 2 }}
             />
             <TextField
@@ -284,21 +299,20 @@ const WebPageConfigForm: React.FC = () => {
               value={form.values.contactNumber || ""}
               onBlur={form.handleBlur}
               onChange={form.handleChange}
-              error={form.touched.contactNumber && Boolean(form.errors.contactNumber)}
-              helperText={form.touched.contactNumber && form.errors.contactNumber}
+              error={
+                form.touched.contactNumber && Boolean(form.errors.contactNumber)
+              }
+              helperText={
+                form.touched.contactNumber && form.errors.contactNumber
+              }
               InputProps={{
-                  endAdornment: <Call />
+                endAdornment: <Call />,
               }}
             />
           </Stack>
         </Grid>
-        <Grid
-          item
-          xs={12}
-        >
-          <Typography sx={{ mb: "5px" }}>
-            Upload Banner Image
-          </Typography>
+        <Grid item xs={12}>
+          <Typography sx={{ mb: "5px" }}>Upload Banner Image</Typography>
           <BannerContainer>
             <UploadImage
               style={{ width: "full", height: 500 }}
