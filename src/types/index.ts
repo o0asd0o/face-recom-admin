@@ -18,23 +18,18 @@ export type RegistrationDetails = {
   status?: Status;
 };
 
-export type UserInformation = Omit<
-  RegistrationDetails,
-  'password'
->;
+export type UserInformation = Omit<RegistrationDetails, "password">;
 
 export type ProductInformation = {
   id?: string;
   sadFoodRating: number;
   happyFoodRating: number;
-  surpriseFoodRating: number;
-  angryFoodRating: number;
   image: File | null | string;
   name: string;
   price: number;
   categories: string[];
-  ownerEmail?: string
-}
+  ownerEmail?: string;
+};
 
 export type WebPageInformation = {
   id?: string;
@@ -48,7 +43,7 @@ export type WebPageInformation = {
   facebookPage: string;
   contactNumber: string;
   address: string;
-}
+};
 
 export type WebPage = {
   id?: string;
@@ -61,31 +56,29 @@ export type WebPage = {
   facebookPage: string;
   contactNumber: string;
   addres: string;
-}
+};
 
 export type Product = {
   id?: string;
   sadFoodRating: number;
   happyFoodRating: number;
-  surpriseFoodRating: number;
-  angryFoodRating: number;
   imageUrl: string;
   name: string;
   ownerEmail: string;
   price: number;
   categories: string[];
-}
+};
 
-export type CurrentUser = { 
-    id: string;
-    avatarUrl: string,
-    address: string,
-    firstName: string,
-    lastName: string,
-    phoneNumber: string,
-    email: string,
-    role: "owner" | "admin"
-}
+export type CurrentUser = {
+  id: string;
+  avatarUrl: string;
+  address: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+  email: string;
+  role: "owner" | "admin";
+};
 
 export type Customer = {
   id: string;
@@ -105,4 +98,4 @@ export type RestoOwner = {
   avatarUrl: string;
   address: string;
   status?: string;
-}
+};

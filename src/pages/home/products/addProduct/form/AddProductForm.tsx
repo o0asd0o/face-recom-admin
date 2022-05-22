@@ -34,50 +34,39 @@ type Props = {
 };
 
 const validation = yup.object({
-    sadFoodRating: yup.number().required("Sad rating is required"),
-    happyFoodRating: yup.number().required("Happy rating is required"),
-    surpriseFoodRating: yup.number().required("Surprise rating is required"),
-    angryFoodRating: yup.number().required("Angry rating is required"),
-    image: yup
-        .mixed()
-        .required('Product image is required')
-        .test(
-            'fileSize',
-            'File size too large, max file size is 1 Mb',
-            validateFileSize
-        )
-        .test(
-            'fileType',
-            'Incorrect file type',
-            (file) =>
-                file &&
-                [
-                  'image/png',
-                  'image/jpg',
-                  'image/jpeg'
-                ].includes(file.type)
-        ),
-    name: yup.string().required("Product name is required"),
-    price: yup.number().required("Price is required"),
-    categories: yup.array().of(
-      yup.string()
-          .max(255)
-          .required()
+  sadFoodRating: yup.number().required("Sad rating is required"),
+  happyFoodRating: yup.number().required("Happy rating is required"),
+  image: yup
+    .mixed()
+    .required("Product image is required")
+    .test(
+      "fileSize",
+      "File size too large, max file size is 1 Mb",
+      validateFileSize
     )
-    .min(1, 'Please fill at least 1 category'),
-    ownerEmail: yup.string()
+    .test(
+      "fileType",
+      "Incorrect file type",
+      (file) =>
+        file && ["image/png", "image/jpg", "image/jpeg"].includes(file.type)
+    ),
+  name: yup.string().required("Product name is required"),
+  price: yup.number().required("Price is required"),
+  categories: yup
+    .array()
+    .of(yup.string().max(255).required())
+    .min(1, "Please fill at least 1 category"),
+  ownerEmail: yup.string(),
 });
 
 const initialValues: ProductInformation = {
   sadFoodRating: 0,
   happyFoodRating: 0,
-  surpriseFoodRating: 0,
-  angryFoodRating: 0,
   image: null,
   name: "",
   price: 1,
   categories: [],
-  ownerEmail: ""
+  ownerEmail: "",
 };
 
 const AddProductForm: React.FC<Props> = ({ onBack }) => {
@@ -86,48 +75,49 @@ const AddProductForm: React.FC<Props> = ({ onBack }) => {
 
   const { userInfo } = useAuth();
 
-  useEffect(() => { 
+  useEffect(() => {
     const unsub = onUsersSnapshot((snapshot) => {
       const users: string[] = [];
       snapshot.forEach((doc) => users.push(doc.data().email));
 
       setOwnerEmails(users);
-    }, 'owner');
+    }, "owner");
 
     return () => unsub();
   }, []);
 
   const handleAddProduct = React.useCallback(
     async (values: ProductInformation) => {
+      if (!values.ownerEmail && userInfo?.role === "admin") {
+        toast.error("Owner Email is required!");
+        return;
+      }
 
-        if (!values.ownerEmail && userInfo?.role === 'admin') {
-          toast.error("Owner Email is required!");
-          return;
+      setLoading(true);
+
+      const addProductProcesses = async () => {
+        let productImagePath = "";
+        if (typeof values.image !== "string" && values.image !== null) {
+          productImagePath = await uploadProductImage(values.image);
         }
 
-        setLoading(true);
+        const ownerEmail =
+          userInfo?.role === "admin" ? values.ownerEmail : userInfo?.email;
+        const productData: ProductData = mapProductDataForAdd(
+          values,
+          productImagePath,
+          ownerEmail || ""
+        );
+        await addDoc(productsCollection, productData);
 
-        const addProductProcesses = async () => {
-            let productImagePath = "";
-            if (typeof values.image !== "string" && values.image !== null) {
-                productImagePath = await uploadProductImage(values.image);
-            }
+        form.resetForm();
+      };
 
-            const ownerEmail = userInfo?.role === 'admin' ? values.ownerEmail : userInfo?.email;
-            const productData: ProductData = mapProductDataForAdd(
-                values,
-                productImagePath,
-                ownerEmail || ''
-            );
-            await addDoc(productsCollection, productData);
-
-            form.resetForm();
-        };
-
-        return await toast.promise(addProductProcesses, {
-            pending: "Adding product...",
-            success: "Successfuly add product!",
-            error: "Error while processing the request",
+      return await toast
+        .promise(addProductProcesses, {
+          pending: "Adding product...",
+          success: "Successfuly add product!",
+          error: "Error while processing the request",
         })
         .finally(() => setLoading(false));
     },
@@ -210,8 +200,9 @@ const AddProductForm: React.FC<Props> = ({ onBack }) => {
               error={form.touched.price && Boolean(form.errors.price)}
               helperText={form.touched.price && form.errors.price}
             />
-            {userInfo?.role === "admin" && (<>
-              <TextField
+            {userInfo?.role === "admin" && (
+              <>
+                <TextField
                   fullWidth
                   name="happyFoodRating"
                   label="Happy Rating (0-12)"
@@ -223,12 +214,20 @@ const AddProductForm: React.FC<Props> = ({ onBack }) => {
                   onBlur={form.handleBlur}
                   onChange={({ target }) => {
                     const { value } = target;
-                    form.setFieldValue('happyFoodRating', Math.max(0, Math.min(12, parseInt(value))));
+                    form.setFieldValue(
+                      "happyFoodRating",
+                      Math.max(0, Math.min(12, parseInt(value)))
+                    );
                   }}
-                  error={form.touched.happyFoodRating && Boolean(form.errors.happyFoodRating)}
-                  helperText={form.touched.happyFoodRating && form.errors.happyFoodRating }
-              />
-              <TextField
+                  error={
+                    form.touched.happyFoodRating &&
+                    Boolean(form.errors.happyFoodRating)
+                  }
+                  helperText={
+                    form.touched.happyFoodRating && form.errors.happyFoodRating
+                  }
+                />
+                <TextField
                   fullWidth
                   name="sadFoodRating"
                   label="Sad Rating (0-12)"
@@ -240,46 +239,21 @@ const AddProductForm: React.FC<Props> = ({ onBack }) => {
                   onBlur={form.handleBlur}
                   onChange={({ target }) => {
                     const { value } = target;
-                    form.setFieldValue('sadFoodRating', Math.max(0, Math.min(12, parseInt(value))));
+                    form.setFieldValue(
+                      "sadFoodRating",
+                      Math.max(0, Math.min(12, parseInt(value)))
+                    );
                   }}
-                  error={form.touched.sadFoodRating && Boolean(form.errors.sadFoodRating)}
-                  helperText={form.touched.sadFoodRating && form.errors.sadFoodRating }
-              />
-              <TextField
-                  fullWidth
-                  name="surpriseFoodRating"
-                  label="Surprise Rating (0-12)"
-                  variant="outlined"
-                  inputProps={{ min: 0, max: 12 }}
-                  type="number"
-                  autoComplete="off"
-                  value={form.values.surpriseFoodRating}
-                  onBlur={form.handleBlur}
-                  onChange={({ target }) => {
-                    const { value } = target;
-                    form.setFieldValue('surpriseFoodRating', Math.max(0, Math.min(12, parseInt(value))));
-                  }}
-                  error={form.touched.surpriseFoodRating && Boolean(form.errors.surpriseFoodRating)}
-                  helperText={form.touched.surpriseFoodRating && form.errors.surpriseFoodRating }
-              />
-              <TextField
-                  fullWidth
-                  name="angryFoodRating"
-                  label="Angry Rating (0-12)"
-                  variant="outlined"
-                  inputProps={{ min: 0, max: 12 }}
-                  type="number"
-                  autoComplete="off"
-                  value={form.values.angryFoodRating}
-                  onBlur={form.handleBlur}
-                  onChange={({ target }) => {
-                    const { value } = target;
-                    form.setFieldValue('angryFoodRating', Math.max(0, Math.min(12, parseInt(value))));
-                  }}
-                  error={form.touched.angryFoodRating && Boolean(form.errors.angryFoodRating)}
-                  helperText={form.touched.angryFoodRating && form.errors.angryFoodRating }
-              />
-            </>)}
+                  error={
+                    form.touched.sadFoodRating &&
+                    Boolean(form.errors.sadFoodRating)
+                  }
+                  helperText={
+                    form.touched.sadFoodRating && form.errors.sadFoodRating
+                  }
+                />
+              </>
+            )}
             <CategoryInput
               fullWidth
               autoComplete="off"

@@ -32,32 +32,31 @@ type Props = {
   onBack: () => void;
 };
 
-export const Form = styled("form")`
+export const Form = styled("form")``;
 
-`
-
-const getValidation = (isAdmin: boolean) => yup.object({
-    ...(isAdmin ? {
-      happyFoodRating: yup.number().required("Happy Food rating is required"),
-      angryFoodRating: yup.number().required("Angry Food rating is required"),
-      surpriseFoodRating: yup.number().required("Surprise Food rating is required"),
-      sadFoodRating: yup.number().required("Sad Food rating is required"),
-    }: {}),
+const getValidation = (isAdmin: boolean) =>
+  yup.object({
+    ...(isAdmin
+      ? {
+          happyFoodRating: yup
+            .number()
+            .required("Happy Food rating is required"),
+          sadFoodRating: yup.number().required("Sad Food rating is required"),
+        }
+      : {}),
     image: yup.mixed(),
     name: yup.string().required("Product name is required"),
     price: yup.number().required("Price is required"),
-});
+  });
 
 const initialValues: ProductInformation = {
   sadFoodRating: 0,
   happyFoodRating: 0,
-  angryFoodRating: 0,
-  surpriseFoodRating: 0,
   image: null,
   name: "",
   price: 1,
   categories: [],
-  ownerEmail: ""
+  ownerEmail: "",
 };
 
 const EditProductForm: React.FC<Props> = ({ onBack }) => {
@@ -66,41 +65,42 @@ const EditProductForm: React.FC<Props> = ({ onBack }) => {
   const [ownerEmails, setOwnerEmails] = React.useState<string[]>([]);
 
   const { userInfo } = useAuth();
-  const { productId } = useParams(); 
+  const { productId } = useParams();
 
-  useEffect(() => { 
+  useEffect(() => {
     const unsub = onUsersSnapshot((snapshot) => {
       const users: string[] = [];
       snapshot.forEach((doc) => users.push(doc.data().email));
 
       setOwnerEmails(users);
-    }, 'owner');
+    }, "owner");
 
     return () => unsub();
   }, []);
 
   const handleUpdateProduct = React.useCallback(
     async ({ id, ...values }) => {
-        setLoading(true);
+      setLoading(true);
 
-        const editProductProcesses = async () => {
-            let productImagePath = values.image;
-            if (typeof values.image !== "string" && values.image !== null) {
-                productImagePath = await uploadProductImage(values.image);
-            }
+      const editProductProcesses = async () => {
+        let productImagePath = values.image;
+        if (typeof values.image !== "string" && values.image !== null) {
+          productImagePath = await uploadProductImage(values.image);
+        }
 
-            const productData: ProductData = mapProductDataForUpdate(
-                values,
-                productImagePath,
-            );
+        const productData: ProductData = mapProductDataForUpdate(
+          values,
+          productImagePath
+        );
 
-            await updateProductDoc(id, productData)
-        };
+        await updateProductDoc(id, productData);
+      };
 
-        return await toast.promise(editProductProcesses, {
-            pending: "Updating product...",
-            success: "Successfuly updated product!",
-            error: "Error while processing the request",
+      return await toast
+        .promise(editProductProcesses, {
+          pending: "Updating product...",
+          success: "Successfuly updated product!",
+          error: "Error while processing the request",
         })
         .finally(() => setLoading(false));
     },
@@ -119,26 +119,30 @@ const EditProductForm: React.FC<Props> = ({ onBack }) => {
     const { email, role } = userInfo;
     setLoading(true);
 
-    const unsub = onProductsSnapshot((snapshot) => {
+    const unsub = onProductsSnapshot(
+      (snapshot) => {
         const productsResult: Array<ProductInformation> = [];
         snapshot.forEach((doc) => {
-            productsResult.push({
-                id: doc.id,
-                sadFoodRating: doc.data().sadFoodRating || 0,
-                angryFoodRating: doc.data().angryFoodRating || 0,
-                happyFoodRating: doc.data().happyFoodRating || 0,
-                surpriseFoodRating: doc.data().surpriseFoodRating || 0,
-                image: doc.data().imageUrl,
-                name: doc.data().name,
-                price: doc.data().price,
-                categories: doc.data().categories || [],
-                ownerEmail: doc.data().ownerEmail
-            });
+          productsResult.push({
+            id: doc.id,
+            sadFoodRating: doc.data().sadFoodRating || 0,
+            happyFoodRating: doc.data().happyFoodRating || 0,
+            image: doc.data().imageUrl,
+            name: doc.data().name,
+            price: doc.data().price,
+            categories: doc.data().categories || [],
+            ownerEmail: doc.data().ownerEmail,
+          });
         });
 
-        setSelectedProduct(productsResult.find((item) => item.id === productId));
+        setSelectedProduct(
+          productsResult.find((item) => item.id === productId)
+        );
         setLoading(false);
-    }, email, role === "owner");
+      },
+      email,
+      role === "owner"
+    );
 
     return () => unsub();
   }, [userInfo?.email, productId]);
@@ -213,8 +217,9 @@ const EditProductForm: React.FC<Props> = ({ onBack }) => {
               error={form.touched.price && Boolean(form.errors.price)}
               helperText={form.touched.price && form.errors.price}
             />
-            {userInfo?.role === "admin" && (<>
-              <TextField
+            {userInfo?.role === "admin" && (
+              <>
+                <TextField
                   fullWidth
                   name="happyFoodRating"
                   label="Happy Food Rating (0-12)"
@@ -226,12 +231,20 @@ const EditProductForm: React.FC<Props> = ({ onBack }) => {
                   onBlur={form.handleBlur}
                   onChange={({ target }) => {
                     const { value } = target;
-                    form.setFieldValue('happyFoodRating', Math.max(0, Math.min(12, parseInt(value))));
+                    form.setFieldValue(
+                      "happyFoodRating",
+                      Math.max(0, Math.min(12, parseInt(value)))
+                    );
                   }}
-                  error={form.touched.happyFoodRating && Boolean(form.errors.happyFoodRating)}
-                  helperText={form.touched.happyFoodRating && form.errors.happyFoodRating }
-              />
-              <TextField
+                  error={
+                    form.touched.happyFoodRating &&
+                    Boolean(form.errors.happyFoodRating)
+                  }
+                  helperText={
+                    form.touched.happyFoodRating && form.errors.happyFoodRating
+                  }
+                />
+                <TextField
                   fullWidth
                   name="sadFoodRating"
                   label="Sad Food Rating (0-12)"
@@ -243,46 +256,21 @@ const EditProductForm: React.FC<Props> = ({ onBack }) => {
                   onBlur={form.handleBlur}
                   onChange={({ target }) => {
                     const { value } = target;
-                    form.setFieldValue('sadFoodRating', Math.max(0, Math.min(12, parseInt(value))));
+                    form.setFieldValue(
+                      "sadFoodRating",
+                      Math.max(0, Math.min(12, parseInt(value)))
+                    );
                   }}
-                  error={form.touched.sadFoodRating && Boolean(form.errors.sadFoodRating)}
-                  helperText={form.touched.sadFoodRating && form.errors.sadFoodRating}
-              />
-              <TextField
-                  fullWidth
-                  name="surpriseFoodRating"
-                  label="Surprise Food Rating (0-12)"
-                  variant="outlined"
-                  inputProps={{ min: 0, max: 12 }}
-                  type="number"
-                  autoComplete="off"
-                  value={form.values.surpriseFoodRating}
-                  onBlur={form.handleBlur}
-                  onChange={({ target }) => {
-                    const { value } = target;
-                    form.setFieldValue('surpriseFoodRating', Math.max(0, Math.min(12, parseInt(value))));
-                  }}
-                  error={form.touched.surpriseFoodRating && Boolean(form.errors.surpriseFoodRating)}
-                  helperText={form.touched.surpriseFoodRating && form.errors.surpriseFoodRating}
-              />
-              <TextField
-                  fullWidth
-                  name="angryFoodRating"
-                  label="Angry Food Rating (0-12)"
-                  variant="outlined"
-                  inputProps={{ min: 0, max: 12 }}
-                  type="number"
-                  autoComplete="off"
-                  value={form.values.angryFoodRating}
-                  onBlur={form.handleBlur}
-                  onChange={({ target }) => {
-                    const { value } = target;
-                    form.setFieldValue('angryFoodRating', Math.max(0, Math.min(12, parseInt(value))));
-                  }}
-                  error={form.touched.angryFoodRating && Boolean(form.errors.angryFoodRating)}
-                  helperText={form.touched.angryFoodRating && form.errors.angryFoodRating}
-              />
-            </>)}
+                  error={
+                    form.touched.sadFoodRating &&
+                    Boolean(form.errors.sadFoodRating)
+                  }
+                  helperText={
+                    form.touched.sadFoodRating && form.errors.sadFoodRating
+                  }
+                />
+              </>
+            )}
             <CategoryInput
               fullWidth
               autoComplete="off"
